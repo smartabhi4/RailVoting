@@ -48,7 +48,6 @@ export default {
       )
         .then((response) => response.json())
         .then((data) => {
-          alert(data)
           this.employee = data
         })
         .catch((error) => {
