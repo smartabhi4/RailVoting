@@ -83,6 +83,7 @@ export default {
             <th>Station</th>
             <th>Working Under</th>
             <th>HRMS ID</th>
+            <th>Voter List Number</th>
             <th>Booth Name</th>
             <th>Booth Number</th>
           </tr>
@@ -95,6 +96,7 @@ export default {
             <td>{{ employee.station }}</td>
             <td>{{ employee.workingUnder }}</td>
             <td>{{ employee.hrmsId }}</td>
+            <td>{{ employee.voterListNumber }}</td>
             <td>{{ employee.boothName }}</td>
             <td>{{ employee.boothNumber }}</td>
           </tr>
