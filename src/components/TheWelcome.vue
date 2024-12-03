@@ -1,90 +1,102 @@
-<script setup>
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
+<script>
+export default {
+  data() {
+    return {
+      message: 'Hello Employees',
+    }
+  },
+  computed: {
+    hasEmployee() {
+      return this.isEmpty(this.employee) ? false : true
+    },
+  },
+  methods: {
+    isEmpty(obj) {
+      return Object.keys(obj).length === 0
+    },
+    callApi() {
+      const inputValue = document.getElementById('inputBox').value
+
+      if (!inputValue) {
+        alert('ENTER HRMS ID or EMP ID')
+        return
+      }
+
+      fetch(
+        'https://nwreu-backend.vercel.app/knowyourbooth/search?hrmsId=' +
+          inputValue +
+          '&empId=' +
+          inputValue,
+        {
+          headers: {
+            accept: 'application/json, text/plain, */*',
+            'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+            priority: 'u=1, i',
+            'sec-ch-ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"macOS"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'cross-site',
+            Referer: 'https://www.nwreu.org/',
+            'Referrer-Policy': 'strict-origin-when-cross-origin',
+          },
+          body: null,
+          method: 'GET',
+        },
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.employee = data
+        })
+        .catch((error) => {
+          alert('API call failed! Error: ' + error)
+        })
+    },
+  },
+}
 </script>
 
 <template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
-
-    Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a>
-    provides you with all information you need to get started.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <ToolingIcon />
-    </template>
-    <template #heading>Tooling</template>
-
-    This project is served and bundled with
-    <a href="https://vite.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The
-    recommended IDE setup is
-    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a>
-    +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank" rel="noopener">Volar</a>. If
-    you need to test your components and web pages, check out
-    <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a>
-    and
-    <a href="https://on.cypress.io/component" target="_blank" rel="noopener"
-      >Cypress Component Testing</a
-    >.
-
+  <div class="container">
+    <input
+      style="height: 50px; width: 300px"
+      type="text"
+      id="inputBox"
+      class="input-box"
+      placeholder="ENTER HRMS ID or EMP ID"
+    />
     <br />
-
-    More instructions are available in <code>README.md</code>.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <EcosystemIcon />
-    </template>
-    <template #heading>Ecosystem</template>
-
-    Get official tools and libraries for your project:
-    <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
-    <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If
-    you need more resources, we suggest paying
-    <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a>
-    a visit.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Community</template>
-
-    Got stuck? Ask your question on
-    <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>, our official
-    Discord server, or
-    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
-      >StackOverflow</a
-    >. You should also subscribe to
-    <a href="https://news.vuejs.org" target="_blank" rel="noopener">our mailing list</a>
-    and follow the official
-    <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
-    twitter account for latest news in the Vue world.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
-    </template>
-    <template #heading>Support Vue</template>
-
-    As an independent project, Vue relies on community backing for its sustainability. You can help
-    us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
-  </WelcomeItem>
+    <button class="button" type="submit" @click="callApi">Get Your Booth</button>
+  </div>
+  <div v-if="hasEmployee">
+    <table>
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Designation</th>
+          <th>Emp Id</th>
+          <th>Station</th>
+          <th>Working Under</th>
+          <th>HRMS ID</th>
+          <th>Booth Name</th>
+          <th>Booth Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr :key="employee.id">
+          <td>
+            <a href="javascript(0);">{{ employee.name }}</a>
+          </td>
+          <td>{{ employee.designation }}</td>
+          <td>{{ employee.empId }}</td>
+          <td>{{ employee.station }}</td>
+          <td>{{ employee.workingUnder }}</td>
+          <td>{{ employee.hrmsId }}</td>
+          <td>{{ employee.boothName }}</td>
+          <td>{{ employee.boothNumber }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
