@@ -74,7 +74,7 @@ export default {
       </button>
     </div>
     <div v-if="hasEmployee">
-      <table>
+      <table style="margin-top: 50px; border: ridge">
         <thead>
           <tr>
             <th>Employee Name</th>
@@ -90,13 +90,17 @@ export default {
         </thead>
         <tbody>
           <tr :key="employee.id">
-            <td>{{ employee.name }}</td>
+            <td>
+              <a>{{ employee.name }}</a>
+            </td>
             <td>{{ employee.designation }}</td>
             <td>{{ employee.empId }}</td>
             <td>{{ employee.station }}</td>
             <td>{{ employee.workingUnder }}</td>
             <td>{{ employee.hrmsId }}</td>
-            <td>{{ employee.voterListNumber }}</td>
+            <td>
+              <a>{{ employee.voterListNumber }}</a>
+            </td>
             <td>{{ employee.boothName }}</td>
             <td>{{ employee.boothNumber }}</td>
           </tr>
@@ -159,7 +163,9 @@ table {
   border-collapse: collapse;
   width: 100%;
 }
-
+a {
+  color: blue;
+}
 th {
   text-align: left;
   padding: 15px;
